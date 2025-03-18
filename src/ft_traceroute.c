@@ -12,19 +12,21 @@
 
 #include "ft_traceroute.h"
 
+
+
 int	main(int ac, char **av)
 {
-	// int		i;
-	// bool	flag_v;
+	struct sockaddr_in	ip_dest;
+	int					sock[2];
+	int					i;
 
 	if (ac < 2)
 		print_help();
 	check_flags(ac, av);
-	// i = 0;
-	// while (++i < ac)
-	// {
-	// 	if (av[i][0] != '-')
-	// 		start_ping(av[i], init_socket(), flag_v);
-	// }
+	init_socket(&sock);
+	i = 1;
+	while (i < ac && av[i][0] == '-')
+		i++;
+	check_ip(&ip_dest, av[i], i);
 	return (0);
 }
