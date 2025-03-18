@@ -14,22 +14,17 @@
 
 int	main(int ac, char **av)
 {
-	int		i;
-	bool	flag_v;
+	// int		i;
+	// bool	flag_v;
 
 	if (ac < 2)
-	{
-		printf("ping: missing host operand\n");
-		printf("Try \'ping -?\' or \'ping --help\'\n");
-		exit(1);
-	}
-	flag_v = check_flags(ac, av);
-	i = 0;
-	while (++i < ac)
-	{
-		g_stop = true;
-		if (av[i][0] != '-')
-			start_ping(av[i], init_socket(), flag_v);
-	}
+		print_help();
+	check_flags(ac, av);
+	// i = 0;
+	// while (++i < ac)
+	// {
+	// 	if (av[i][0] != '-')
+	// 		start_ping(av[i], init_socket(), flag_v);
+	// }
 	return (0);
 }

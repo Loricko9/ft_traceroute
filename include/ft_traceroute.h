@@ -13,4 +13,13 @@
 #ifndef FT_TRACEROUTE_H
 # define FT_TRACEROUTE_H
 
+# include <stdbool.h>
+# include <stdlib.h>
+# include <stdio.h>
+# include <string.h>
+
+/*check_flags.c*/
+void	print_help(void);
+bool	check_flags(int ac, char **av);
+
 #endif

@@ -6,7 +6,7 @@
 /*   By: lle-saul <lle-saul@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 10:25:46 by lle-saul          #+#    #+#             */
-/*   Updated: 2025/03/17 17:17:00 by lle-saul         ###   ########.fr       */
+/*   Updated: 2025/03/18 10:38:41 by lle-saul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,62 +14,69 @@
 
 void	print_help(void)
 {
-	printf("Usage: ft_ping [OPTION...] HOST ...\n");
-	printf("Send ICMP ECHO_REQUEST packets to network hosts.\n\n");
-	printf("Options valid for all request types:\n\n");
-	printf("-v, --verbose              verbose output\n");
-	printf("-?, --help                 give this help list\n\n");
-	printf("Mandatory or optional arguments to long options are also");
-	printf(" mandatory or optional\nfor any corresponding short options.\n");
+	printf("Usage:\n");
+	printf("  traceroute host\n\n");
+	printf("Arguments:\n");
+	printf("+     host          The host to traceroute to\n");
 	exit(0);
 }
 
-void	print_err_flag(char *err, bool type)
+void	print_err_flag(char *err, int cases, int argc)
 {
-	if (type)
-		printf("ft_ping: invalid option -- '%c'\n", err[0]);
+	if (cases == 0)
+		printf("Extra arg `%s' (argc %d)\n", err, argc);
 	else
-		printf("ft_ping: invalid option -- '%s'\n", err);
-	printf("Try 'ft_ping --help' for more information.\n");
-	exit(64);
+		printf("Bad option `%s' (argc %d)\n", err, argc);
+	exit(2);
 }
 
-void	check_flags_letter(char *str, bool *res)
+void	check_flags_letter(char *str, int argc)
 {
 	int	i;
 
 	i = 0;
 	while (str[++i])
 	{
-		if (str[i] == '?')
-			print_help();
-		else if (str[i] == 'v')
-			*res = true;
+		// if (str[i] == '?')
+		// 	print_help();
+		// else if (str[i] == 'v')
+		// 	*res = true;
+		if (str[i] == ' ')
+			print_err_flag(str + i + 1, 0, argc);
 		else
-			print_err_flag(&str[i], true);
+			print_err_flag(str, 1, argc);
 	}
+}
+
+void	check_flags2(char *arg, int i)
+{
+	if (strcmp(arg + 2, "help") == 0)
+		print_help();
+	else
+		print_err_flag(arg, 1, i);
 }
 
 bool	check_flags(int ac, char **av)
 {
 	int		i;
-	bool	res;
+	int		j;
+	// bool	res;
 
 	i = 0;
-	res = false;
+	j = 0;
+	// res = false;
 	while (++i < ac)
 	{
-		if (av[i][0] && av[i][0] == '-' && av[i][1] && av[i][1] != '-')
-			check_flags_letter(av[i], &res);
+		if (j > 2)
+			print_err_flag(av[i - 1], 0, i - 1);
+		else if (av[i][0] && av[i][0] == '-' && av[i][1] && av[i][1] != '-')
+			check_flags_letter(av[i], i);
 		else if (av[i][0] && av[i][1] && av[i][0] == '-' && av[i][1] == '-')
-		{
-			if (strcmp(av[i] + 2, "help") == 0)
-				print_help();
-			if (strcmp(av[i] + 2, "verbose") == 0)
-				res = true;
-			else
-				print_err_flag(av[i], false);
-		}
+			check_flags2(av[i], i);
+		else
+			j++;
 	}
-	return (res);
+	if (j > 2)
+		print_err_flag(av[i - 1], 0, i - 1);
+	return (false);
 }
