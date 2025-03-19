@@ -20,21 +20,45 @@
 # include <unistd.h>
 # include <netdb.h>
 # include <sys/socket.h>
- #include <sys/types.h>
+# include <sys/types.h>
+# include <sys/time.h>
 # include <arpa/inet.h>
 # include <netinet/in.h>
+# include <netinet/ip_icmp.h>
+
+# define TIMEOUT 1
+
+typedef struct s_info
+{
+	int	dest_port;
+	int	max_ttl;
+	int	send_size;
+} t_info;
 
 /*check_flags.c*/
 void	print_help(void);
-bool	check_flags(int ac, char **av);
+bool	check_flags(int ac, char **av, t_info *info);
 
 /*socket.c*/
 void	init_socket(int (*sock)[2]);
 void	change_ttl(int *sock, int ttl);
-void	ft_free(int *sock);
+void	ft_free(int *sock, char *str);
 
 /*package.c*/
-bool	convert_hostname(struct sockaddr_in *ip_addr, char *address, int pos);
-bool	check_ip(struct sockaddr_in *ip_addr, char *address, int pos);
+bool	convert_hostname(struct sockaddr_in *ip_addr, char *address);
+bool	check_ip(struct sockaddr_in *ip_addr, char *address, t_info *info);
+bool	check_pkg(struct ip *ip_res, struct icmp *icmp_res, int ttl);
+
+/*print.c*/
+void	print_start(struct sockaddr_in	*ip_dest, char *address, t_info *info);
+void	print_help(void);
+void	print_err_flag(char *err, int cases, int argc);
+void	print_err_option(char *flag, char *err, int argc);
+
+/*utils.c*/
+bool	ft_strcmp(char *src, char *dest);
+int		ft_atoi(const char *nptr);
+bool	ft_is_digit(char *str);
+char	*get_host_size(char **av, int ac, t_info *info);
 
 #endif
