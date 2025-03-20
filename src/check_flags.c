@@ -6,7 +6,7 @@
 /*   By: lle-saul <lle-saul@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 10:25:46 by lle-saul          #+#    #+#             */
-/*   Updated: 2025/03/19 17:09:49 by lle-saul         ###   ########.fr       */
+/*   Updated: 2025/03/20 10:26:36 by lle-saul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,10 @@ void	get_ttl(char *str, char *str_next, int argc, t_info *info)
 		res = ft_atoi(str_next);
 	else if (str && str[2])
 		print_err_option("-m", str + 2, argc);
-	else
+	else if (str)
 		print_err_option("-m", str_next, argc);
+	else
+		print_err_option("--max-hops", str_next, argc);
 	if (res <= 0 || res > 255)
 	{
 		printf("max hops cannot be more than 255\n");
@@ -42,8 +44,10 @@ void	get_port(char *str, char *str_next, int argc, t_info *info)
 		res = ft_atoi(str_next);
 	else if (str && str[2])
 		print_err_option("-p", str + 2, argc);
-	else
+	else if (str)
 		print_err_option("-p", str_next, argc);
+	else
+		print_err_option("--port", str_next, argc);
 	info->dest_port = res;
 }
 

@@ -55,15 +55,22 @@ int	ft_atoi(const char *nptr)
 
 bool	ft_is_digit(char *str)
 {
-	int	i;
+	bool	check;
+	int		i;
 
 	i = -1;
+	check = false;
 	while (str[++i])
 	{
+		if (str[i] >= '0' && str[i] <= '9')
+			check = true;
 		if (str[i] != ' ' && (str[i] < '0' || str[i] > '9'))
 			return (false);
 	}
-	return (true);
+	if (check)
+		return (true);
+	else
+		return (false);
 }
 
 void	get_size(char **av, int ac, t_info *info)
@@ -74,6 +81,7 @@ void	get_size(char **av, int ac, t_info *info)
 	i = 0;
 	while (++i < ac)
 	{
+		//printf("s : %s", av[i]);
 		if (av[i][0] != '-')
 		{
 			res = ft_atoi(av[i]);
@@ -88,7 +96,7 @@ void	get_size(char **av, int ac, t_info *info)
 				info->send_size = res;
 			return ;
 		}
-		if (av[i][0] == '-' && av[i][1] != '-' && av[i][2])
+		if (av[i][0] == '-' && av[i][1] != '-' && !av[i][2])
 			i++;
 	}
 }
