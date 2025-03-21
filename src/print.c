@@ -18,8 +18,12 @@ void	print_start(struct sockaddr_in *ip_dest, char *address, t_info *info)
 
 	if (inet_ntop(AF_INET, &(ip_dest->sin_addr), host, INET_ADDRSTRLEN) == NULL)
 		fprintf(stderr, "error inet_ntop\n");
-	printf("traceroute to %s (%s), %d hops max, %d byte packets",
-		address, host, info->max_ttl, info->send_size);
+	if (info->send_size + 8 <= 28)
+		printf("traceroute to %s (%s), %d hops max, 28 byte packets\n",
+			address, host, info->max_ttl);
+	else
+		printf("traceroute to %s (%s), %d hops max, %d byte packets\n",
+			address, host, info->max_ttl, info->send_size + 8);
 }
 
 void	print_help(void)

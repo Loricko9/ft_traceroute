@@ -12,6 +12,22 @@
 
 # include "ft_traceroute.h"
 
+void	create_send_pkg(char *str, int seq, size_t size)
+{
+	struct timeval tv;
+	int	pid;
+	
+	if (str == NULL)
+		return ;
+	ft_memset(str, 0, size);
+	pid = getpid();
+	ft_memcpy(str, &pid, sizeof(pid));
+	ft_memcpy(str + 4, &seq, sizeof(seq));
+    gettimeofday(&tv, NULL);
+    ft_memcpy(str + 8, &tv, sizeof(tv));
+	ft_memset(str + 16, 'A', size - 16);
+}
+
 bool	check_pkg(struct ip *ip_res, struct icmp *icmp_res, int ttl)
 {
 	char	host[INET_ADDRSTRLEN];
@@ -32,7 +48,7 @@ bool	convert_hostname(struct sockaddr_in *ip_addr, char *address)
 	struct addrinfo	*res;
 	int				ret;
 
-	memset(&hint, 0, sizeof(hint));
+	ft_memset(&hint, 0, sizeof(hint));
 	hint.ai_family = AF_INET;
 	hint.ai_socktype = SOCK_DGRAM;
 	ret = getaddrinfo(address, NULL, &hint, &res);
@@ -42,18 +58,19 @@ bool	convert_hostname(struct sockaddr_in *ip_addr, char *address)
 		printf("Cannot handle \"host\" cmdline arg `%s'", address);
 		return (true);
 	}
-	memcpy(ip_addr, res->ai_addr, sizeof(struct sockaddr_in));
+	ft_memset(ip_addr, 0, sizeof(struct sockaddr_in));
+	ft_memcpy(ip_addr, res->ai_addr, res->ai_addrlen);
 	freeaddrinfo(res);
 	return (false);
 }
 
-bool	check_ip(struct sockaddr_in *ip_addr, char *address, t_info *info)
+bool		check_ip(struct sockaddr_in *ip_addr, char *address, t_info *info)
 {
-	memset(ip_addr, 0, sizeof(*ip_addr));
+	ft_memset(ip_addr, 0, sizeof(struct sockaddr_in));
 	ip_addr->sin_family = AF_INET;
-	ip_addr->sin_port = htons(info->dest_port);
 	if (inet_pton(AF_INET, address, &ip_addr->sin_addr) <= 0)
 		if (convert_hostname(ip_addr, address))
 			return (true);
+	ip_addr->sin_port = htons(info->dest_port);
 	return (false);
 }

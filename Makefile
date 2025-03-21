@@ -1,8 +1,8 @@
-FILES 	=	ft_traceroute.c check_flags.c package.c socket.c utils.c print.c
+FILES 	=	ft_traceroute.c check_flags.c package.c socket.c utils.c print.c get_host.c
 
 NAME	=	ft_traceroute
 CC		=	cc
-CFLAGS	+=	-W -Wall -Wextra -Werror
+CFLAGS	+=	-W -Wall -Wextra -Werror -g
 RM		=	rm -rf
 INCLUDE	=	-I include/
 

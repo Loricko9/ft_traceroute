@@ -48,6 +48,10 @@ void	ft_free(int *sock, char *str);
 bool	convert_hostname(struct sockaddr_in *ip_addr, char *address);
 bool	check_ip(struct sockaddr_in *ip_addr, char *address, t_info *info);
 bool	check_pkg(struct ip *ip_res, struct icmp *icmp_res, int ttl);
+void	create_send_pkg(char *str, int seq, size_t size);
+
+/*get_host.c*/
+char	*get_host_size(char **av, int ac, t_info *info);
 
 /*print.c*/
 void	print_start(struct sockaddr_in	*ip_dest, char *address, t_info *info);
@@ -59,6 +63,7 @@ void	print_err_option(char *flag, char *err, int argc);
 bool	ft_strcmp(char *src, char *dest);
 int		ft_atoi(const char *nptr);
 bool	ft_is_digit(char *str);
-char	*get_host_size(char **av, int ac, t_info *info);
+void	*ft_memset(void *prt, int nb, size_t len);
+void	*ft_memcpy(void *dest, void *src, size_t len);
 
 #endif

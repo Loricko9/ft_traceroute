@@ -73,56 +73,32 @@ bool	ft_is_digit(char *str)
 		return (false);
 }
 
-void	get_size(char **av, int ac, t_info *info)
+void	*ft_memset(void *ptr, int nb, size_t len)
 {
-	int	i;
-	int	res;
-
+	size_t	i;
+	
+	if (!ptr)
+		return (NULL);
 	i = 0;
-	while (++i < ac)
+	while(i < len)
 	{
-		//printf("s : %s", av[i]);
-		if (av[i][0] != '-')
-		{
-			res = ft_atoi(av[i]);
-			if (res <= 0)
-			{
-				printf("Cannot handle \"packetlen\" cmdline arg `%s'\n", av[i]);
-				exit(2);
-			}
-			else if (res < 28)
-				info->send_size = 28;
-			else
-				info->send_size = res;
-			return ;
-		}
-		if (av[i][0] == '-' && av[i][1] != '-' && !av[i][2])
-			i++;
+		((unsigned char *)ptr)[i] = nb;
+		i++;
 	}
+	return (ptr);
 }
 
-char	*get_host_size(char **av, int ac, t_info *info)
+void	*ft_memcpy(void *dest, void *src, size_t len)
 {
-	char	*res_host;
-	int		i;
+	size_t	i;
 
+	if (!dest || !src)
+		return (NULL);
 	i = 0;
-	res_host = NULL;
-	while (++i < ac)
+	while (i < len)
 	{
-		if (av[i][0] != '-')
-		{
-			res_host = av[i];
-			break;
-		}
-		if (av[i][0] == '-' && av[i][1] != '-' && !av[i][2])
-			i++;
+		((unsigned char *)dest)[i] = ((unsigned char *)src)[i];
+		i++;
 	}
-	if (i == ac)
-	{
-		printf("Specify \"host\" missing argument.");
-		exit(2);
-	}
-	get_size(av + i, ac - i, info);
-	return (res_host);
+	return (dest);
 }

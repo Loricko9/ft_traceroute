@@ -19,14 +19,14 @@ bool	wait_response(int *sock, struct icmp *icmp_res, struct ip *ip_res)
 
 	if (recvfrom(sock[1], buff_recv, sizeof(buff_recv), 0,
 		(struct sockaddr *)&recv_ip, NULL) <= 0)
-		return (fprintf(stderr, "Erreur sendto"), true);
+		return (perror("recvfrom"), true);
 	ip_res = (struct ip *)buff_recv;
 	icmp_res = (struct icmp *)(buff_recv + (ip_res->ip_hl << 2));
 	(void)icmp_res;
 	return (false);
 }
 
-bool	loop_traceroute(int *sock, struct sockaddr_in ip_dest, t_info *info)
+bool	loop_traceroute(int *sock, struct sockaddr_in *ip_dest, t_info *info)
 {
 	struct icmp	icmp_res;
 	struct ip	ip_res;
@@ -37,11 +37,11 @@ bool	loop_traceroute(int *sock, struct sockaddr_in ip_dest, t_info *info)
 	buff_send = malloc(info->send_size);
 	while (ttl <= info->max_ttl)
 	{
-		memset(buff_send, 'T', info->send_size);
+		create_send_pkg(buff_send, ttl, info->send_size);
 		change_ttl(sock, ttl);
-		if (sendto(sock[0], NULL, 0, 0,
-			(struct sockaddr *)&ip_dest, sizeof(ip_dest)) <= 0)
-			return (fprintf(stderr, "Erreur sendto"), true);
+		if (sendto(sock[0], buff_send, (size_t)info->send_size, 0,
+			(struct sockaddr *)ip_dest, sizeof(*ip_dest)) <= 0)
+			return (perror("sendto"), ft_free(sock, buff_send), true);
 		wait_response(sock, &icmp_res, &ip_res);
 		if (check_pkg(&ip_res, &icmp_res, ttl))
 			break;
@@ -60,7 +60,7 @@ int	main(int ac, char **av)
 
 	info.dest_port = 33434;
 	info.max_ttl = 30;
-	info.send_size = 60;
+	info.send_size = 52;
 	if (ac < 2)
 		print_help();
 	check_flags(ac, av, &info);
@@ -68,8 +68,9 @@ int	main(int ac, char **av)
 	printf("host : %s\n", host);
 	printf("port : %d | ttl : %d | size : %d\n", info.dest_port, info.max_ttl, info.send_size);
 	init_socket(&sock);
-	check_ip(&ip_dest, host, &info);
+	if (check_ip(&ip_dest, host, &info))
+		return (ft_free(sock, NULL), 1);
 	print_start(&ip_dest, host, &info);
-	loop_traceroute(sock, ip_dest, &info);
+	loop_traceroute(sock, &ip_dest, &info);
 	return (0);
 }
