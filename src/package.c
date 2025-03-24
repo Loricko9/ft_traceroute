@@ -28,18 +28,25 @@ void	create_send_pkg(char *str, int seq, size_t size)
 	ft_memset(str + 16, 'A', size - 16);
 }
 
-bool	check_pkg(struct ip *ip_res, struct icmp *icmp_res, int ttl)
+bool	check_pkg(struct ip *ip_res, struct icmp *icmp_res, int pkg_nb, double res_time)
 {
-	char	host[INET_ADDRSTRLEN];
+	static char	last_host[INET_ADDRSTRLEN] = {0};
+	char		host[INET_ADDRSTRLEN];
 
 	if (!ip_res || !icmp_res)
-		return (true);
-	if (icmp_res->icmp_type == ICMP_DEST_UNREACH)
 		return (false);
 	if (inet_ntop(AF_INET, &(ip_res->ip_src), host, INET_ADDRSTRLEN) == NULL)
 		fprintf(stderr, "error inet_ntop\n");
-	printf(" %d  \n", ttl);
-	return (true);
+	if (pkg_nb == 1 || ft_strcmp(host, last_host))
+		printf(" %s  %.3f ms", host, res_time);
+	else
+		printf("  %.3f ms", res_time);
+	if (pkg_nb == 3)
+		printf("\n");
+	ft_memcpy(last_host, host, INET_ADDRSTRLEN);
+	if (icmp_res->icmp_type == ICMP_DEST_UNREACH)
+		return (true);
+	return (false);
 }
 
 bool	convert_hostname(struct sockaddr_in *ip_addr, char *address)

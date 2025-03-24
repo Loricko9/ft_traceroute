@@ -47,7 +47,7 @@ void	ft_free(int *sock, char *str);
 /*package.c*/
 bool	convert_hostname(struct sockaddr_in *ip_addr, char *address);
 bool	check_ip(struct sockaddr_in *ip_addr, char *address, t_info *info);
-bool	check_pkg(struct ip *ip_res, struct icmp *icmp_res, int ttl);
+bool	check_pkg(struct ip *ip_res, struct icmp *icmp_res, int pkg_nb, double res_time);
 void	create_send_pkg(char *str, int seq, size_t size);
 
 /*get_host.c*/
@@ -58,6 +58,7 @@ void	print_start(struct sockaddr_in	*ip_dest, char *address, t_info *info);
 void	print_help(void);
 void	print_err_flag(char *err, int cases, int argc);
 void	print_err_option(char *flag, char *err, int argc);
+void	print_err_resp(int pkg_nb);
 
 /*utils.c*/
 bool	ft_strcmp(char *src, char *dest);
@@ -65,5 +66,8 @@ int		ft_atoi(const char *nptr);
 bool	ft_is_digit(char *str);
 void	*ft_memset(void *prt, int nb, size_t len);
 void	*ft_memcpy(void *dest, void *src, size_t len);
+
+/*utils2.c*/
+double	ft_time(bool cases);
 
 #endif

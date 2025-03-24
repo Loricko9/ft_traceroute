@@ -53,3 +53,10 @@ void	print_err_option(char *flag, char *err, int argc)
 			flag, err, argc);
 	exit(2);
 }
+
+void	print_err_resp(int pkg_nb)
+{
+	printf(" *");
+	if (pkg_nb == 3)
+		printf("\n");
+}

@@ -42,6 +42,7 @@ void	change_ttl(int *sock, int ttl)
 		ft_free(sock, NULL);
 		exit(1);
 	}
+	printf(" %d ", ttl);
 }
 
 void	ft_free(int *sock, char *str)

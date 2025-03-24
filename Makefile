@@ -1,4 +1,4 @@
-FILES 	=	ft_traceroute.c check_flags.c package.c socket.c utils.c print.c get_host.c
+FILES 	=	ft_traceroute.c check_flags.c package.c socket.c utils.c utils2.c print.c get_host.c
 
 NAME	=	ft_traceroute
 CC		=	cc

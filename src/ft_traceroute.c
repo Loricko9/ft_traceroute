@@ -12,40 +12,50 @@
 
 #include "ft_traceroute.h"
 
-bool	wait_response(int *sock, struct icmp *icmp_res, struct ip *ip_res)
+bool	wait_response(int *sock, double res_time, int pkg_nb)
 {
 	char				buff_recv[516];
+	struct icmp			*icmp_res;
+	struct ip			*ip_res;
 	struct sockaddr_in	recv_ip;
+	socklen_t			len;
 
+	len = sizeof(recv_ip);
 	if (recvfrom(sock[1], buff_recv, sizeof(buff_recv), 0,
-		(struct sockaddr *)&recv_ip, NULL) <= 0)
-		return (perror("recvfrom"), true);
+		(struct sockaddr *)&recv_ip, &len) <= 0)
+		return (print_err_resp(pkg_nb), false);
+	res_time = ft_time(true);
 	ip_res = (struct ip *)buff_recv;
 	icmp_res = (struct icmp *)(buff_recv + (ip_res->ip_hl << 2));
-	(void)icmp_res;
+	if (check_pkg(ip_res, icmp_res, pkg_nb, res_time))
+		return (true);
 	return (false);
 }
 
 bool	loop_traceroute(int *sock, struct sockaddr_in *ip_dest, t_info *info)
 {
-	struct icmp	icmp_res;
-	struct ip	ip_res;
 	char		*buff_send;
 	int			ttl;
+	int			packet_nb;
+	bool		stop;
 
-	ttl = 1;
+	ttl = 0;
+	stop = false;
 	buff_send = malloc(info->send_size);
-	while (ttl <= info->max_ttl)
+	while (++ttl <= info->max_ttl && !stop)
 	{
-		create_send_pkg(buff_send, ttl, info->send_size);
+		packet_nb = 0;
 		change_ttl(sock, ttl);
-		if (sendto(sock[0], buff_send, (size_t)info->send_size, 0,
-			(struct sockaddr *)ip_dest, sizeof(*ip_dest)) <= 0)
-			return (perror("sendto"), ft_free(sock, buff_send), true);
-		wait_response(sock, &icmp_res, &ip_res);
-		if (check_pkg(&ip_res, &icmp_res, ttl))
-			break;
-		ttl++;
+		while (++packet_nb <= 3)
+		{
+			create_send_pkg(buff_send, ttl, info->send_size);
+			ft_time(false);
+			if (sendto(sock[0], buff_send, (size_t)info->send_size, 0,
+				(struct sockaddr *)ip_dest, sizeof(*ip_dest)) <= 0)
+				return (perror("sendto"), ft_free(sock, buff_send), true);
+			if (wait_response(sock, 0.0, packet_nb))
+				stop = true;
+		}
 	}
 	ft_free(sock, buff_send);
 	return (false);
