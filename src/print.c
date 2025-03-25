@@ -29,9 +29,21 @@ void	print_start(struct sockaddr_in *ip_dest, char *address, t_info *info)
 void	print_help(void)
 {
 	printf("Usage:\n");
-	printf("  traceroute host\n\n");
+	printf("  traceroute [ -m max_ttl ] [ -p port ] host [ packetlen ]\n\n");
+	printf("Options:\n");
+	printf("  -f first_ttl  --first=first_ttl\n");
+	printf("\t\t\t\tStart from the first_ttl hop (instead from 1)\n");
+	printf("  -m max_ttl  --max-hops=max_ttl\n");
+	printf("\t\t\t\tSet the max number of hops (max TTL to be\n");
+	printf("\t\t\t\treached). Default is 30\")\n");
+	printf("  -p port  --port=port          Set the destination port to use. It ");
+	printf("is either\n\t\t\t\tinitial udp port value for \"default\" method\n");
+	printf("\t\t\t\t(incremented by each probe, default is 33434)\n\n");
 	printf("Arguments:\n");
 	printf("+     host          The host to traceroute to\n");
+	printf("      packetlen     The full packet length (default is the length");
+	printf(" of an IP\n                    header plus 40). Can be ignored");
+	printf(" or increased to a minimal\n                    allowed value");
 	exit(0);
 }
 
