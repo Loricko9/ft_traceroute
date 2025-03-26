@@ -32,6 +32,7 @@ typedef struct s_info
 {
 	int	dest_port;
 	int	max_ttl;
+	int first_ttl;
 	int	send_size;
 } t_info;
 

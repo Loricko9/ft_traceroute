@@ -39,7 +39,7 @@ bool	loop_traceroute(int *sock, struct sockaddr_in *ip_dest, t_info *info)
 	int			packet_nb;
 	bool		stop;
 
-	ttl = 0;
+	ttl = info->first_ttl - 1;
 	stop = false;
 	buff_send = malloc(info->send_size);
 	while (++ttl <= info->max_ttl && !stop)
@@ -71,12 +71,15 @@ int	main(int ac, char **av)
 	info.dest_port = 33434;
 	info.max_ttl = 30;
 	info.send_size = 52;
+	info.first_ttl = 1;
 	if (ac < 2)
 		print_help();
 	check_flags(ac, av, &info);
+	if (info.first_ttl > info.max_ttl)
+		return(printf("first hop out of range\n"), 2);
 	host = get_host_size(av, ac, &info);
 	printf("host : %s\n", host);
-	printf("port : %d | ttl : %d | size : %d\n", info.dest_port, info.max_ttl, info.send_size);
+	printf("port : %d | ttl : %d | 1st ttl : %d | size : %d\n", info.dest_port, info.max_ttl, info.first_ttl, info.send_size);
 	init_socket(&sock);
 	if (check_ip(&ip_dest, host, &info))
 		return (ft_free(sock, NULL), 1);
