@@ -37,7 +37,7 @@ bool	check_pkg(struct ip *ip_res, struct icmp *icmp_res, int pkg_nb, double res_
 		return (false);
 	if (inet_ntop(AF_INET, &(ip_res->ip_src), host, INET_ADDRSTRLEN) == NULL)
 		fprintf(stderr, "error inet_ntop\n");
-	if (pkg_nb == 1 || ft_strcmp(host, last_host))
+	if (pkg_nb == 1 || !ft_strcmp(host, last_host))
 		printf(" %s  %.3f ms", host, res_time);
 	else
 		printf("  %.3f ms", res_time);

@@ -16,14 +16,14 @@ bool	ft_strcmp(char *src, char *dest)
 {
 	int i;
 
-	i = 0;
+	i = 0; 
 	while (dest[i] && src[i])
 	{
 		if (src[i] != dest[i])
 			return (false);
 		i++;
 	}
-	if (!src[i])
+	if (!src[i] && dest[i])
 		return (false);
 	return (true);
 }

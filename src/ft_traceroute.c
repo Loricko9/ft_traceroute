@@ -21,6 +21,7 @@ bool	wait_response(int *sock, double res_time, int pkg_nb)
 	socklen_t			len;
 
 	len = sizeof(recv_ip);
+	ft_memset(buff_recv, 0, 516);
 	if (recvfrom(sock[1], buff_recv, sizeof(buff_recv), 0,
 		(struct sockaddr *)&recv_ip, &len) <= 0)
 		return (print_err_resp(pkg_nb), false);
@@ -48,6 +49,7 @@ bool	loop_traceroute(int *sock, struct sockaddr_in *ip_dest, t_info *info)
 		change_ttl(sock, ttl);
 		while (++packet_nb <= 3)
 		{
+			ip_dest->sin_port = htons(info->dest_port + (packet_nb - 1));
 			create_send_pkg(buff_send, ttl, info->send_size);
 			ft_time(false);
 			if (sendto(sock[0], buff_send, (size_t)info->send_size, 0,
@@ -57,8 +59,7 @@ bool	loop_traceroute(int *sock, struct sockaddr_in *ip_dest, t_info *info)
 				stop = true;
 		}
 	}
-	ft_free(sock, buff_send);
-	return (false);
+	return (ft_free(sock, buff_send), false);
 }
 
 int	main(int ac, char **av)
