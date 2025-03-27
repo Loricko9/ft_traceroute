@@ -51,8 +51,10 @@ void	print_err_flag(char *err, int cases, int argc)
 {
 	if (cases == 0)
 		printf("Extra arg `%s' (argc %d)\n", err, argc);
-	else
+	else if (cases == 1)
 		printf("Bad option `%s' (argc %d)\n", err, argc);
+	else
+		printf("Bad option `-%c' (argc %d)\n", *err, argc);
 	exit(2);
 }
 

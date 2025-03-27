@@ -29,3 +29,12 @@ double	ft_time(bool cases)
 	}
 	return (res);
 }
+
+void	init_info(t_info *info)
+{
+	info->dest_port = 33434;
+	info->max_ttl = 30;
+	info->send_size = 52;
+	info->first_ttl = 1;
+	info->print_host = true;
+}

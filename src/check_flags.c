@@ -6,7 +6,7 @@
 /*   By: lle-saul <lle-saul@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 10:25:46 by lle-saul          #+#    #+#             */
-/*   Updated: 2025/03/25 18:43:27 by lle-saul         ###   ########.fr       */
+/*   Updated: 2025/03/27 18:26:04 by lle-saul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,14 +75,23 @@ void	get_first_ttl(char *str, char *str_next, int argc, t_info *info)
 
 void	check_flags_letter(char *str, char *str_next, int argc, t_info *info)
 {
-	if (str[1] == 'm')
-		get_ttl(str, str_next, argc, info);
-	else if (str[1] == 'p')
-		get_port(str, str_next, argc, info);
-	else if (str[1] == 'f')
-		get_first_ttl(str, str_next, argc, info);
-	else
-		print_err_flag(str, 1, argc);
+	int	i;
+	
+	i = 0;
+	while (str[++i])
+	{
+		if (str[i] == 'm')
+			get_ttl(str, str_next, argc, info);
+		else if (str[i] == 'p')
+			get_port(str, str_next, argc, info);
+		else if (str[i] == 'f')
+			get_first_ttl(str, str_next, argc, info);
+		else if (str[i] == 'r')
+			info->print_host = false;
+		else
+			print_err_flag(str + i, 2, argc);
+	}
+	
 }
 
 bool	check_flags(int ac, char **av, t_info *info)

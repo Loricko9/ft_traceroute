@@ -28,31 +28,38 @@ void	create_send_pkg(char *str, int seq, size_t size)
 	ft_memset(str + 16, 'A', size - 16);
 }
 
-bool	check_pkg(struct ip *ip_res, struct icmp *icmp_res, int pkg_nb, double res_time)
+void	print_pkg(char *ip, struct sockaddr_in recv_addr, bool print, t_pkg_res *pkg_res)
 {
 	static char			last_ip[INET_ADDRSTRLEN] = {0};
-	char				ip[INET_ADDRSTRLEN];
 	char				hostname[NI_MAXHOST];
-	struct sockaddr_in	recv_addr;
 
-	if (!ip_res || !icmp_res)
-		return (false);
-	if (inet_ntop(AF_INET, &(ip_res->ip_src), ip, INET_ADDRSTRLEN) == NULL)
-		fprintf(stderr, "error inet_ntop\n");
-	recv_addr.sin_family = AF_INET;
-	recv_addr.sin_addr = ip_res->ip_src;
 	if (getnameinfo((struct sockaddr *)&recv_addr, sizeof(recv_addr), hostname,
-		NI_MAXHOST, NULL, 0, NI_NAMEREQD) == 0 && (pkg_nb == 1
-		|| !ft_strcmp(ip, last_ip)))
-		printf(" %s (%s)  %.3f ms", hostname, ip, res_time);
-	else if (pkg_nb == 1 || !ft_strcmp(ip, last_ip))
-		printf(" %s  %.3f ms", ip, res_time);
+		NI_MAXHOST, NULL, 0, NI_NAMEREQD) == 0 && (pkg_res->pkg_nb == 1
+		|| !ft_strcmp(ip, last_ip)) && print)
+		printf(" %s (%s)  %.3f ms", hostname, ip, pkg_res->time);
+	else if (pkg_res->pkg_nb == 1 || !ft_strcmp(ip, last_ip))
+		printf(" %s  %.3f ms", ip, pkg_res->time);
 	else
-		printf("  %.3f ms", res_time);
-	if (pkg_nb == 3)
+		printf("  %.3f ms", pkg_res->time);
+	if (pkg_res->pkg_nb == 3)
 		printf("\n");
 	ft_memcpy(last_ip, ip, INET_ADDRSTRLEN);
-	if (icmp_res->icmp_type == ICMP_DEST_UNREACH)
+}
+
+bool	check_pkg(t_pkg_res *pkg_res, bool print)
+{
+	char				ip[INET_ADDRSTRLEN];
+	struct sockaddr_in	recv_addr;
+
+	if (!pkg_res->ip || !pkg_res->icmp)
+		return (false);
+	if (inet_ntop(AF_INET, &(pkg_res->ip->ip_src), ip, INET_ADDRSTRLEN)
+		== NULL)
+		fprintf(stderr, "error inet_ntop\n");
+	recv_addr.sin_family = AF_INET;
+	recv_addr.sin_addr = pkg_res->ip->ip_src;
+	print_pkg(ip, recv_addr, print, pkg_res);
+	if (pkg_res->icmp->icmp_type == ICMP_DEST_UNREACH)
 		return (true);
 	return (false);
 }
@@ -79,7 +86,7 @@ bool	convert_ipname(struct sockaddr_in *ip_addr, char *address)
 	return (false);
 }
 
-bool		check_ip(struct sockaddr_in *ip_addr, char *address, t_info *info)
+bool	check_ip(struct sockaddr_in *ip_addr, char *address, t_info *info)
 {
 	ft_memset(ip_addr, 0, sizeof(struct sockaddr_in));
 	ip_addr->sin_family = AF_INET;

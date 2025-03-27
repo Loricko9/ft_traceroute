@@ -30,11 +30,20 @@
 
 typedef struct s_info
 {
-	int	dest_port;
-	int	max_ttl;
-	int first_ttl;
-	int	send_size;
+	int		dest_port;
+	int		max_ttl;
+	int 	first_ttl;
+	int		send_size;
+	bool	print_host;
 } t_info;
+
+typedef struct s_pkg_res
+{
+	struct icmp	*icmp;
+	struct ip	*ip;
+	double		time;
+	int			pkg_nb;
+} t_pkg_res;
 
 /*check_flags.c*/
 void	print_help(void);
@@ -46,9 +55,9 @@ void	change_ttl(int *sock, int ttl);
 void	ft_free(int *sock, char *str);
 
 /*package.c*/
-bool	convert_hostname(struct sockaddr_in *ip_addr, char *address);
+bool	convert_ipname(struct sockaddr_in *ip_addr, char *address);
 bool	check_ip(struct sockaddr_in *ip_addr, char *address, t_info *info);
-bool	check_pkg(struct ip *ip_res, struct icmp *icmp_res, int pkg_nb, double res_time);
+bool	check_pkg(t_pkg_res *pkg_res, bool print);
 void	create_send_pkg(char *str, int seq, size_t size);
 
 /*get_host.c*/
@@ -70,5 +79,6 @@ void	*ft_memcpy(void *dest, void *src, size_t len);
 
 /*utils2.c*/
 double	ft_time(bool cases);
+void	init_info(t_info *info);
 
 #endif

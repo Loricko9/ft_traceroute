@@ -12,11 +12,10 @@
 
 #include "ft_traceroute.h"
 
-bool	wait_response(int *sock, double res_time, int pkg_nb)
+bool	wait_response(int *sock, int pkg_nb, bool print)
 {
 	char				buff_recv[516];
-	struct icmp			*icmp_res;
-	struct ip			*ip_res;
+	t_pkg_res			pkg_res;
 	struct sockaddr_in	recv_ip;
 	socklen_t			len;
 
@@ -25,10 +24,11 @@ bool	wait_response(int *sock, double res_time, int pkg_nb)
 	if (recvfrom(sock[1], buff_recv, sizeof(buff_recv), 0,
 		(struct sockaddr *)&recv_ip, &len) <= 0)
 		return (print_err_resp(pkg_nb), false);
-	res_time = ft_time(true);
-	ip_res = (struct ip *)buff_recv;
-	icmp_res = (struct icmp *)(buff_recv + (ip_res->ip_hl << 2));
-	if (check_pkg(ip_res, icmp_res, pkg_nb, res_time))
+	pkg_res.time = ft_time(true);
+	pkg_res.ip = (struct ip *)buff_recv;
+	pkg_res.icmp = (struct icmp *)(buff_recv + (pkg_res.ip->ip_hl << 2));
+	pkg_res.pkg_nb = pkg_nb;
+	if (check_pkg(&pkg_res, print))
 		return (true);
 	return (false);
 }
@@ -55,7 +55,7 @@ bool	loop_traceroute(int *sock, struct sockaddr_in *ip_dest, t_info *info)
 			if (sendto(sock[0], buff_send, (size_t)info->send_size, 0,
 				(struct sockaddr *)ip_dest, sizeof(*ip_dest)) <= 0)
 				return (perror("sendto"), ft_free(sock, buff_send), true);
-			if (wait_response(sock, 0.0, packet_nb))
+			if (wait_response(sock, packet_nb, info->print_host))
 				stop = true;
 		}
 	}
@@ -69,10 +69,7 @@ int	main(int ac, char **av)
 	int					sock[2];
 	char				*host;
 
-	info.dest_port = 33434;
-	info.max_ttl = 30;
-	info.send_size = 52;
-	info.first_ttl = 1;
+	init_info(&info);
 	if (ac < 2)
 		print_help();
 	check_flags(ac, av, &info);
@@ -80,7 +77,7 @@ int	main(int ac, char **av)
 		return(printf("first hop out of range\n"), 2);
 	host = get_host_size(av, ac, &info);
 	printf("host : %s\n", host);
-	printf("port : %d | ttl : %d | 1st ttl : %d | size : %d\n", info.dest_port, info.max_ttl, info.first_ttl, info.send_size);
+	printf("port : %d | ttl : %d | 1st ttl : %d | size : %d | print : %d\n", info.dest_port, info.max_ttl, info.first_ttl, info.send_size, info.print_host);
 	init_socket(&sock);
 	if (check_ip(&ip_dest, host, &info))
 		return (ft_free(sock, NULL), 1);
