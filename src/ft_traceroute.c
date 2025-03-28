@@ -76,8 +76,6 @@ int	main(int ac, char **av)
 	if (info.first_ttl > info.max_ttl)
 		return (printf("first hop out of range\n"), 2);
 	host = get_host_size(av, ac, &info);
-	printf("host : %s\n", host);
-	printf("port : %d | ttl : %d | 1st ttl : %d | size : %d | print : %d\n", info.dest_port, info.max_ttl, info.first_ttl, info.send_size, info.print_host);
 	init_socket(&sock);
 	if (check_ip(&ip_dest, host, &info))
 		return (ft_free(sock, NULL), 1);
