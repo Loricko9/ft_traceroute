@@ -6,7 +6,7 @@
 /*   By: lle-saul <lle-saul@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 10:25:46 by lle-saul          #+#    #+#             */
-/*   Updated: 2025/03/28 10:11:08 by lle-saul         ###   ########.fr       */
+/*   Updated: 2025/03/28 12:04:56 by lle-saul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,10 +86,12 @@ void	check_flags_letter(char *str, char *str_next, int argc, t_info *info)
 			get_port(str, str_next, argc, info);
 		else if (str[i] == 'f')
 			get_first_ttl(str, str_next, argc, info);
-		else if (str[i] == 'r')
+		else if (str[i] == 'n')
 			info->print_host = false;
 		else if (str[i] == 'h')
 			print_help();
+		else if (i > 1 && str[i] >= '0' && str[i] <= '9')
+			continue ;
 		else
 			print_err_flag(str + i, 2, argc);
 	}
@@ -114,6 +116,8 @@ bool	check_flags(int ac, char **av, t_info *info)
 				get_ttl(NULL, av[i] + 11, i, info);
 			else if (ft_strcmp(av[i] + 2, "first="))
 				get_first_ttl(NULL, av[i] + 8, i, info);
+			else if (!av[i][2])
+				continue ;
 			else
 				print_err_flag(av[i], 1, i);
 		}
