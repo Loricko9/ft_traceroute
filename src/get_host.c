@@ -82,7 +82,7 @@ char	*get_host_size(char **av, int ac, t_info *info)
 			break ;
 		}
 		if (av[i][0] == '-' && ((av[i][1] != '-' && !av[i][2])
-			|| (av[i][1] == 'n' && av[i][2] && av[i][3])))
+			|| (av[i][1] == 'n' && av[i][2])))
 			i++;
 	}
 	if (i == ac)
