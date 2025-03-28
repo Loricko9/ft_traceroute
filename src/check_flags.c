@@ -6,7 +6,7 @@
 /*   By: lle-saul <lle-saul@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 10:25:46 by lle-saul          #+#    #+#             */
-/*   Updated: 2025/03/27 18:26:04 by lle-saul         ###   ########.fr       */
+/*   Updated: 2025/03/28 09:47:59 by lle-saul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	get_ttl(char *str, char *str_next, int argc, t_info *info)
 {
 	int	res;
-	
+
 	if (str && str[2] && ft_is_digit(str + 2))
 		res = ft_atoi(str + 2);
 	else if (str_next && ft_is_digit(str_next))
@@ -37,7 +37,7 @@ void	get_ttl(char *str, char *str_next, int argc, t_info *info)
 void	get_port(char *str, char *str_next, int argc, t_info *info)
 {
 	int	res;
-	
+
 	if (str && str[2] && ft_is_digit(str + 2))
 		res = ft_atoi(str + 2);
 	else if (str_next && ft_is_digit(str_next))
@@ -54,7 +54,7 @@ void	get_port(char *str, char *str_next, int argc, t_info *info)
 void	get_first_ttl(char *str, char *str_next, int argc, t_info *info)
 {
 	int	res;
-	
+
 	if (str && str[2] && ft_is_digit(str + 2))
 		res = ft_atoi(str + 2);
 	else if (str_next && ft_is_digit(str_next))
@@ -76,7 +76,7 @@ void	get_first_ttl(char *str, char *str_next, int argc, t_info *info)
 void	check_flags_letter(char *str, char *str_next, int argc, t_info *info)
 {
 	int	i;
-	
+
 	i = 0;
 	while (str[++i])
 	{
@@ -91,7 +91,6 @@ void	check_flags_letter(char *str, char *str_next, int argc, t_info *info)
 		else
 			print_err_flag(str + i, 2, argc);
 	}
-	
 }
 
 bool	check_flags(int ac, char **av, t_info *info)

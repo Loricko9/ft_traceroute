@@ -14,9 +14,9 @@
 
 bool	ft_strcmp(char *src, char *dest)
 {
-	int i;
+	int	i;
 
-	i = 0; 
+	i = 0;
 	while (dest[i] && src[i])
 	{
 		if (src[i] != dest[i])
@@ -76,11 +76,11 @@ bool	ft_is_digit(char *str)
 void	*ft_memset(void *ptr, int nb, size_t len)
 {
 	size_t	i;
-	
+
 	if (!ptr)
 		return (NULL);
 	i = 0;
-	while(i < len)
+	while (i < len)
 	{
 		((unsigned char *)ptr)[i] = nb;
 		i++;

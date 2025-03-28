@@ -10,32 +10,33 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "ft_traceroute.h"
+#include "ft_traceroute.h"
 
 void	create_send_pkg(char *str, int seq, size_t size)
 {
-	struct timeval tv;
-	int	pid;
-	
+	struct timeval	tv;
+	int				pid;
+
 	if (str == NULL)
 		return ;
 	ft_memset(str, 0, size);
 	pid = getpid();
 	ft_memcpy(str, &pid, sizeof(pid));
 	ft_memcpy(str + 4, &seq, sizeof(seq));
-    gettimeofday(&tv, NULL);
-    ft_memcpy(str + 8, &tv, sizeof(tv));
+	gettimeofday(&tv, NULL);
+	ft_memcpy(str + 8, &tv, sizeof(tv));
 	ft_memset(str + 16, 'A', size - 16);
 }
 
-void	print_pkg(char *ip, struct sockaddr_in recv_addr, bool print, t_pkg_res *pkg_res)
+void	print_pkg(char *ip, struct sockaddr_in recv_addr, bool print,
+					t_pkg_res *pkg_res)
 {
 	static char			last_ip[INET_ADDRSTRLEN] = {0};
 	char				hostname[NI_MAXHOST];
 
 	if (getnameinfo((struct sockaddr *)&recv_addr, sizeof(recv_addr), hostname,
-		NI_MAXHOST, NULL, 0, NI_NAMEREQD) == 0 && (pkg_res->pkg_nb == 1
-		|| !ft_strcmp(ip, last_ip)) && print)
+			NI_MAXHOST, NULL, 0, NI_NAMEREQD) == 0 && (pkg_res->pkg_nb == 1
+			|| !ft_strcmp(ip, last_ip)) && print)
 		printf(" %s (%s)  %.3f ms", hostname, ip, pkg_res->time);
 	else if (pkg_res->pkg_nb == 1 || !ft_strcmp(ip, last_ip))
 		printf(" %s  %.3f ms", ip, pkg_res->time);

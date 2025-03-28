@@ -22,7 +22,7 @@ bool	wait_response(int *sock, int pkg_nb, bool print)
 	len = sizeof(recv_ip);
 	ft_memset(buff_recv, 0, 516);
 	if (recvfrom(sock[1], buff_recv, sizeof(buff_recv), 0,
-		(struct sockaddr *)&recv_ip, &len) <= 0)
+			(struct sockaddr *)&recv_ip, &len) <= 0)
 		return (print_err_resp(pkg_nb), false);
 	pkg_res.time = ft_time(true);
 	pkg_res.ip = (struct ip *)buff_recv;
@@ -53,7 +53,7 @@ bool	loop_traceroute(int *sock, struct sockaddr_in *ip_dest, t_info *info)
 			create_send_pkg(buff_send, ttl, info->send_size);
 			ft_time(false);
 			if (sendto(sock[0], buff_send, (size_t)info->send_size, 0,
-				(struct sockaddr *)ip_dest, sizeof(*ip_dest)) <= 0)
+					(struct sockaddr *)ip_dest, sizeof(*ip_dest)) <= 0)
 				return (perror("sendto"), ft_free(sock, buff_send), true);
 			if (wait_response(sock, packet_nb, info->print_host))
 				stop = true;
@@ -74,7 +74,7 @@ int	main(int ac, char **av)
 		print_help();
 	check_flags(ac, av, &info);
 	if (info.first_ttl > info.max_ttl)
-		return(printf("first hop out of range\n"), 2);
+		return (printf("first hop out of range\n"), 2);
 	host = get_host_size(av, ac, &info);
 	printf("host : %s\n", host);
 	printf("port : %d | ttl : %d | 1st ttl : %d | size : %d | print : %d\n", info.dest_port, info.max_ttl, info.first_ttl, info.send_size, info.print_host);

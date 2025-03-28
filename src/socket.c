@@ -26,7 +26,8 @@ void	init_socket(int (*sock)[2])
 		fprintf(stderr, "Socket creation error");
 		exit(1);
 	}
-	if (setsockopt((*sock)[1], SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout)))
+	if (setsockopt((*sock)[1], SOL_SOCKET, SO_RCVTIMEO, &timeout,
+		sizeof(timeout)))
 	{
 		fprintf(stderr, "Setsocket option error");
 		ft_free(*sock, NULL);

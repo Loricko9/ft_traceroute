@@ -32,10 +32,10 @@ typedef struct s_info
 {
 	int		dest_port;
 	int		max_ttl;
-	int 	first_ttl;
+	int		first_ttl;
 	int		send_size;
 	bool	print_host;
-} t_info;
+}	t_info;
 
 typedef struct s_pkg_res
 {
@@ -43,7 +43,7 @@ typedef struct s_pkg_res
 	struct ip	*ip;
 	double		time;
 	int			pkg_nb;
-} t_pkg_res;
+}	t_pkg_res;
 
 /*check_flags.c*/
 void	print_help(void);
@@ -64,7 +64,7 @@ void	create_send_pkg(char *str, int seq, size_t size);
 char	*get_host_size(char **av, int ac, t_info *info);
 
 /*print.c*/
-void	print_start(struct sockaddr_in	*ip_dest, char *address, t_info *info);
+void	print_start(struct sockaddr_in *ip_dest, char *address, t_info *info);
 void	print_help(void);
 void	print_err_flag(char *err, int cases, int argc);
 void	print_err_option(char *flag, char *err, int argc);

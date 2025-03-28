@@ -59,7 +59,7 @@ char	*get_host_size(char **av, int ac, t_info *info)
 		if (av[i][0] != '-')
 		{
 			res_host = av[i];
-			break;
+			break ;
 		}
 		if (av[i][0] == '-' && av[i][1] != '-' && !av[i][2])
 			i++;

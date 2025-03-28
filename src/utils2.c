@@ -24,8 +24,8 @@ double	ft_time(bool cases)
 	else
 	{
 		gettimeofday(&end, NULL);
-		res = (end.tv_usec - start.tv_usec) / 1000.0 + (end.tv_sec - start.tv_sec)
-			* 1000.0;
+		res = (end.tv_usec - start.tv_usec) / 1000.0
+			+ (end.tv_sec - start.tv_sec) * 1000.0;
 	}
 	return (res);
 }
