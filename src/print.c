@@ -36,6 +36,7 @@ void	print_help(void)
 	printf("  -m max_ttl  --max-hops=max_ttl\n");
 	printf("\t\t\t\tSet the max number of hops (max TTL to be\n");
 	printf("\t\t\t\treached). Default is 30\")\n");
+	printf("  -n\t\t\t\tDo not resolve IP addresses to their domain names\n");
 	printf("  -p port  --port=port          Set the destination port to use. ");
 	printf("It is either\n\t\t\t\tinitial udp port value for \"default\" ");
 	printf("method\n\t\t\t\t(incremented by each probe, default is 33434)\n\n");

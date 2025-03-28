@@ -6,7 +6,7 @@
 /*   By: lle-saul <lle-saul@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 10:25:46 by lle-saul          #+#    #+#             */
-/*   Updated: 2025/03/28 09:47:59 by lle-saul         ###   ########.fr       */
+/*   Updated: 2025/03/28 10:11:08 by lle-saul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,8 @@ void	check_flags_letter(char *str, char *str_next, int argc, t_info *info)
 			get_first_ttl(str, str_next, argc, info);
 		else if (str[i] == 'r')
 			info->print_host = false;
+		else if (str[i] == 'h')
+			print_help();
 		else
 			print_err_flag(str + i, 2, argc);
 	}
