@@ -81,13 +81,13 @@ char	*get_host_size(char **av, int ac, t_info *info)
 			res_host = av[i];
 			break ;
 		}
-		if (av[i][0] == '-' && ((av[i][1] != '-' && !av[i][2])
-			|| (av[i][1] == 'n' && av[i][2])))
+		if (av[i][0] == '-' && ((av[i][1] != '-' && !av[i][2]
+			&& av[i][1] != 'n' )|| (av[i][1] == 'n' && av[i][2])))
 			i++;
 	}
 	if (i == ac)
 	{
-		printf("Specify \"host\" missing argument.");
+		printf("Specify \"host\" missing argument.\n");
 		exit(2);
 	}
 	get_size(av + i, ac - i, info);
